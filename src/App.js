@@ -2,6 +2,8 @@ import "./App.css"
 import stevePic from "./assets/steve.png"
 import { useState, useEffect } from "react"
 import { deleteJoke, editJoke, getJokes, postNewJoke } from "./services/jokeService"
+import { AddJoke } from "./jokes/AddJoke"
+import { Jokes } from "./jokes/Jokes"
 
 export const App = () => {
   const [userJoke, setUserJoke] = useState([])
@@ -22,7 +24,7 @@ export const App = () => {
     if(userJoke) {
       setUserJoke(userJoke)
     }
-  }, [])
+  }, [userJoke])
 
   useEffect (() => {
     getJokes().then((jokesArray) => {
@@ -55,7 +57,6 @@ export const App = () => {
     return joke
   }
 
-
   return (
     <div className="app-container">
       <div className="app-heading">
@@ -63,51 +64,19 @@ export const App = () => {
           <img className="app-logo" src={stevePic} alt="Good job Steve" />
         </div>
       </div>
-      <div className="joke-add-form">
-        <input 
-          className="joke-input"
-          type="text"
-          placeholder="New One Liner"
-          value={userJoke}
-          onChange={(event) => {
-            setUserJoke(event.target.value)
-          }}
-        />
-        <button 
-          className="joke-input-submit"
-          onClick={() => {
-            postNewJoke(userJoke)
-            setUserJoke("")
-            setAndFetchJokes()
-          }}>
-            Submit Joke
-        </button>
-      </div>
+        <AddJoke setUserJoke={setUserJoke} postNewJoke={postNewJoke} setAndFetchJokes={setAndFetchJokes} userJoke={userJoke}/>
       <div className="joke-lists-container">
           <div className="joke-list-container">
             <h2>Told<span className="told-count">{toldJokes.length}</span></h2>
             {toldJokes.map((joke) => {
               return (
-                <li className="joke-list-item" key={joke.id}>
-                  <p className="joke-list-item-text">{joke.text}</p>
-                  <div className="joke-list-action-toggle">
-                    <button
-                      className="joke-list-action-delete"
-                      onClick={() => {
-                        deleteJoke(joke)
-                        setAndFetchJokes()
-                      }}><i style={{fontSize: "18px"}}>&#128465;</i>
-                    </button>
-                    <button 
-                      className="joke-list-action-toggle"
-                      onClick={() => {
-                        createEditedJoke(joke)
-                        editJoke(joke)
-                        setAndFetchJokes()
-                      }}><i style={{fontSize: "16px"}}>&#128529;</i>
-                    </button>
-                  </div>
-                </li>
+                <Jokes 
+                  deleteJoke={deleteJoke} 
+                  setAndFetchJokes={setAndFetchJokes} 
+                  createEditedJoke={createEditedJoke}
+                  editJoke={editJoke}
+                  joke={joke}
+                />
               )
             })}
           </div>
@@ -115,38 +84,17 @@ export const App = () => {
             <h2>Untold<span className="untold-count">{untoldJokes.length}</span></h2>
             {untoldJokes.map((joke) => {
               return (
-                <li className="joke-list-item" key={joke.id}>
-                  <p className="joke-list-item-text">{joke.text}</p>
-                  <div className="joke-list-action-toggle">
-                    <button
-                      className="joke-list-action-delete"
-                      onClick={() => {
-                        deleteJoke(joke)
-                        setAndFetchJokes()
-                      }}><i style={{fontSize: "18px"}}>&#128465;</i>
-                    </button>
-                    <button
-                      className="joke-list-action-toggle"
-                      onClick={() => {
-                        createEditedJoke(joke)
-                        editJoke(joke)
-                        setAndFetchJokes()
-                      }}><i style={{fontSize: "16px"}}>&#128516;</i>
-                    </button>
-                  </div>
-                </li>
+                <Jokes 
+                  deleteJoke={deleteJoke} 
+                  setAndFetchJokes={setAndFetchJokes} 
+                  createEditedJoke={createEditedJoke}
+                  editJoke={editJoke}
+                  joke={joke}
+                />
               )
             })}
           </div>
       </div>
     </div>
   )
-
 }
-
-
-// "id": 1,
-// "text": "I went to buy some camo pants but couldn’t find any.",
-// "told": false
-
-{/* <button><i className="fa-regular fa-face-meh" /></button> */}
