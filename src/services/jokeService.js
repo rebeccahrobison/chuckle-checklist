@@ -16,15 +16,22 @@ export const postNewJoke = (joke) => {
 }
 
 export const editJoke = (joke) => {
-    const jokeId = joke.id
-    const editedJoke = { "id": joke.id, "text": joke.text, "told": true }
     const putOptions = {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(editedJoke)
+        body: JSON.stringify(joke)
     }
 
-    return fetch(`http://localhost:8088/jokes/${jokeId}`, putOptions)
+    return fetch(`http://localhost:8088/jokes/${joke.id}`, putOptions)
+}
+
+export const deleteJoke = (joke) => {
+    return fetch(`http://localhost:8088/jokes/${joke.id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
 }

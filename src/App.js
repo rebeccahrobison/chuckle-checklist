@@ -1,7 +1,7 @@
 import "./App.css"
 import stevePic from "./assets/steve.png"
 import { useState, useEffect } from "react"
-import { editJoke, getJokes, postNewJoke } from "./services/jokeService"
+import { deleteJoke, editJoke, getJokes, postNewJoke } from "./services/jokeService"
 
 export const App = () => {
   const [userJoke, setUserJoke] = useState([])
@@ -46,6 +46,15 @@ export const App = () => {
    
   }, [allJokes])
 
+  const createEditedJoke = (joke) => {
+    if (joke.told === false) {
+      joke.told = true
+    } else if (joke.told === true) {
+      joke.told = false
+    }
+    return joke
+  }
+
 
   return (
     <div className="app-container">
@@ -82,12 +91,21 @@ export const App = () => {
                 <li className="joke-list-item" key={joke.id}>
                   <p className="joke-list-item-text">{joke.text}</p>
                   <div className="joke-list-action-toggle">
-                    <button 
-                      className=""
+                    <button
+                      className="joke-list-action-delete"
                       onClick={() => {
+                        deleteJoke(joke)
+                        setAndFetchJokes()
+                      }}><i style={{fontSize: "18px"}}>&#128465;</i>
+                    </button>
+                    <button 
+                      className="joke-list-action-toggle"
+                      onClick={() => {
+                        createEditedJoke(joke)
                         editJoke(joke)
                         setAndFetchJokes()
-                      }}>&#128529;</button>
+                      }}><i style={{fontSize: "16px"}}>&#128529;</i>
+                    </button>
                   </div>
                 </li>
               )
@@ -99,17 +117,27 @@ export const App = () => {
               return (
                 <li className="joke-list-item" key={joke.id}>
                   <p className="joke-list-item-text">{joke.text}</p>
-                  <div><button
-                        className=""
-                        onClick={() => {
-                          editJoke(joke)
-                          setAndFetchJokes()
-                        }}>&#128516;</button></div>
+                  <div className="joke-list-action-toggle">
+                    <button
+                      className="joke-list-action-delete"
+                      onClick={() => {
+                        deleteJoke(joke)
+                        setAndFetchJokes()
+                      }}><i style={{fontSize: "18px"}}>&#128465;</i>
+                    </button>
+                    <button
+                      className="joke-list-action-toggle"
+                      onClick={() => {
+                        createEditedJoke(joke)
+                        editJoke(joke)
+                        setAndFetchJokes()
+                      }}><i style={{fontSize: "16px"}}>&#128516;</i>
+                    </button>
+                  </div>
                 </li>
               )
             })}
           </div>
-          
       </div>
     </div>
   )
